@@ -13,3 +13,6 @@ def login_view(request):
         else:
             return HttpResponse("Credenciales incorrectas")
     return render(request, 'ProyectoApp/login.html')
+
+def register_view(request):
+    return render(request, 'ProyectoApp/register.html')
