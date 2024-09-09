@@ -1,0 +1,16 @@
+body {
+    background-image: url("{% static 'ProyectoApp/hotel-bg.jpg' %}");
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+}
+
+.login-container {
+    margin-top: 150px;
+}
+
+.login-form {
+    background: rgba(255, 255, 255, 0.8);
+    padding: 30px;
+    border-radius: 10px;
+}

@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,22 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Hotel</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            background-image: url('/static/ProyectoApp/img/hotel-bg.jpg');
-            background-size: cover;
-            background-position: center;
-            height: 100vh;
-        }
-        .login-container {
-            margin-top: 150px;
-        }
-        .login-form {
-            background: rgba(255, 255, 255, 0.8);
-            padding: 30px;
-            border-radius: 10px;
-        }
-    </style>
+    <link href="{% static 'ProyectoApp/css/styles.css' %}" rel="stylesheet">
 </head>
 <body>
     <div class="container login-container">
