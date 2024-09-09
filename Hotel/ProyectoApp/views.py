@@ -12,4 +12,4 @@ def login_view(request):
             return HttpResponse("Login exitoso")
         else:
             return HttpResponse("Credenciales incorrectas")
-    return render(request, 'login.html')
+    return render(request, 'ProyectoApp/login.html')
