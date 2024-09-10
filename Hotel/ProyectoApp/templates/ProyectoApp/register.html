@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,11 +6,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register - Hotel</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{% static 'ProyectoApp/css/styles.css' %}" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
-        <h2>Pagina Registro</h2>
-        <p>Se modificara luego.</p>
+    <div class="container login-container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="login-form text-center">
+                    <h2>Registrar Nuevo Usuario</h2>                    
+                </div>
+            </div>
+        </div>
     </div>
 </body>
 </html>
