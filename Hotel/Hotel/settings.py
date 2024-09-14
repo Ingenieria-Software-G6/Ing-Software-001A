@@ -82,20 +82,6 @@ DATABASES = {
     }
 }
 
-#DATABASES = {
-#    'default': {
-#        'ENGINE': 'django.db.backends.oracle',
-#        'NAME': '127.0.0.1:1521/xe',
-#        'USER': 'c##hotel',
-#        'PASSWORD': 'oracle',
-#        'TEST': {
-#            'USER': 'default_test',
-#            'TBLSPACE': 'default_test_tbls',
-#            'TBLSPACE_TMP': 'default_test_tbls_tmp',
-#        },
-#    },
-#}
-
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
 
