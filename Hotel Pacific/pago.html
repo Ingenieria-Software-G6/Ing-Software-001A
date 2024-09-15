@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotel Pacific - Pago de Reserva</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            min-height: 100vh;
+            align-items: center;
+            justify-content: center;
+            background: url('https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0') no-repeat center center fixed;
+            background-size: cover;
+        }
+
+        .container {
+            display: flex;
+            max-width: 600px;
+            width: 100%;
+            background-color: rgba(255, 255, 255, 0.9); 
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            flex-direction: column;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            font-size: 24px;
+            color: #333;
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 14px;
+            color: #555;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            transition: border-color 0.3s ease;
+        }
+
+        input:focus {
+            border-color: #27ae60;
+            outline: none;
+        }
+
+        .error {
+            border-color: #e74c3c;
+        }
+
+        .error-message {
+            color: #e74c3c;
+            font-size: 12px;
+            margin-bottom: 15px;
+            display: none;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #334d43;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #2b3f37;
+        }
+
+        small {
+            display: block;
+            margin-top: 20px;
+            font-size: 12px;
+            color: #888;
+            text-align: center;
+        }
+
+        
+        .payment-container small {
+            font-size: 12px;
+            color: #888;
+        }
+
+        
+        @media (max-width: 768px) {
+            .container {
+                max-width: 100%;
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Pago de Reserva</h1>
+
+        <form id="paymentForm">
+            <label for="name">Nombre del titular</label>
+            <input type="text" id="name" name="name" placeholder="Nombre completo del titular" required>
+
+            <label for="cardNumber">Número de tarjeta</label>
+            <input type="text" id="cardNumber" name="cardNumber" placeholder="0000 0000 0000 0000" maxlength="19" required>
+            <div id="cardNumberError" class="error-message">Número de tarjeta no válido.</div>
+
+            <label for="expiryDate">Fecha de vencimiento (MM/AA)</label>
+            <input type="text" id="expiryDate" name="expiryDate" placeholder="MM/AA" maxlength="5" required>
+            <div id="expiryDateError" class="error-message">Fecha de vencimiento no válida.</div>
+
+            <label for="cvv">CVV</label>
+            <input type="text" id="cvv" name="cvv" placeholder="Código CVV" maxlength="4" required>
+            <div id="cvvError" class="error-message">CVV no válido.</div>
+
+            <button type="submit">Pagar</button>
+        </form>
+
+        <small>Tu pago es seguro y está protegido.</small>
+    </div>
+
+    <script>
+        const form = document.getElementById('paymentForm');
+        const cardNumberInput = document.getElementById('cardNumber');
+        const expiryDateInput = document.getElementById('expiryDate');
+        const cvvInput = document.getElementById('cvv');
+        const cardNumberError = document.getElementById('cardNumberError');
+        const expiryDateError = document.getElementById('expiryDateError');
+        const cvvError = document.getElementById('cvvError');
+
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+            let isValid = true;
+            cardNumberError.style.display = 'none';
+            expiryDateError.style.display = 'none';
+            cvvError.style.display = 'none';
+
+            // Validación de número de tarjeta 
+            const cardNumber = cardNumberInput.value.replace(/\s+/g, ''); 
+            if (cardNumber.length !== 16 || isNaN(cardNumber)) {
+                cardNumberError.style.display = 'block';
+                cardNumberInput.classList.add('error');
+                isValid = false;
+            } else {
+                cardNumberInput.classList.remove('error');
+            }
+
+            // Validación de fecha de vencimiento
+            const expiryDate = expiryDateInput.value;
+            const expiryRegex = /^(0[1-9]|1[0-2])\/\d{2}$/; 
+            if (!expiryRegex.test(expiryDate)) {
+                expiryDateError.style.display = 'block';
+                expiryDateInput.classList.add('error');
+                isValid = false;
+            } else {
+                expiryDateInput.classList.remove('error');
+            }
+
+            // Validación de CVV
+            const cvv = cvvInput.value;
+            if (cvv.length < 3 || cvv.length > 4 || isNaN(cvv)) {
+                cvvError.style.display = 'block';
+                cvvInput.classList.add('error');
+                isValid = false;
+            } else {
+                cvvInput.classList.remove('error');
+            }
+
+            // Si todos los campos son válidos, redirigimos a la página de pago exitoso
+            if (isValid) {
+                window.location.href = 'pago-exitoso.html'; 
+            }
+        });
+    </script>
+
+</body>
+</html>

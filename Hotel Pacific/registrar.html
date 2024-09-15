@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotel Pacific - Crear cuenta</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            min-height: 100vh;
+            align-items: center;
+            justify-content: center;
+            background-color: #f0f0f0;
+        }
+
+        .container {
+            display: flex;
+            max-width: 900px;
+            width: 100%;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .form-container {
+            flex: 1;
+            padding: 40px;
+        }
+
+        .form-container h1 {
+            margin-bottom: 20px;
+            font-size: 24px;
+            color: #333;
+        }
+
+        .form-container label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 14px;
+            color: #555;
+        }
+
+        .form-container input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-container input:focus {
+            border-color: #27ae60;
+            outline: none;
+        }
+
+        .form-container .error {
+            border-color: #e74c3c;
+        }
+
+        .form-container .error-message {
+            color: #e74c3c;
+            font-size: 12px;
+            margin-bottom: 10px;
+            display: none;
+        }
+
+        .form-container button {
+            width: 100%;
+            padding: 12px;
+            background-color: #334d43;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .form-container button:hover {
+            background-color: #2b3f37;
+        }
+
+        .image-container {
+            flex: 1;
+            background: url('https://www.hotels-new-york.org/data/Photos/OriginalPhoto/7446/744658/744658519/new-york-the-westin-at-times-square-hotel-photo-51.JPEG') no-repeat center center;
+            background-size: cover;
+        }
+
+        .form-container small {
+            display: block;
+            margin-top: 10px;
+            font-size: 12px;
+            color: #888;
+            text-align: center;
+        }
+
+        .form-container a {
+            color: #334d43;
+            text-decoration: none;
+        }
+
+        .form-container a:hover {
+            text-decoration: underline;
+        }
+
+        
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .image-container {
+                height: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="form-container">
+            <h1>Hotel Pacific</h1>
+            <p>Bienvenido/a a Hotel Pacific</p>
+            <h2>Crear cuenta</h2>
+
+            <form id="registerForm">
+                <label for="name">Tu nombre</label>
+                <input type="text" id="name" name="name" placeholder="Nombres y apellidos" required>
+
+                <label for="email">Correo electrónico</label>
+                <input type="email" id="email" name="email" placeholder="Correo electrónico" required>
+                <div id="emailError" class="error-message">Por favor, introduce un correo válido.</div>
+
+                <label for="password">Contraseña</label>
+                <input type="password" id="password" name="password" placeholder="Como mínimo 6 caracteres" required>
+
+                <label for="confirm-password">Vuelve a escribir la contraseña</label>
+                <input type="password" id="confirm-password" name="confirm-password" placeholder="Vuelve a escribir la contraseña" required>
+                <div id="passwordError" class="error-message">Las contraseñas no coinciden.</div>
+
+                <button type="submit">Crea tu cuenta en Hotel Pacific</button>
+            </form>
+
+            <small>
+                Al crear una cuenta, aceptas las <a href="#">Condiciones de Uso</a> y el <a href="#">Aviso de Privacidad</a> de Hotel Pacific.
+            </small>
+
+            <small>¿Ya tienes una cuenta? <a href="index.html">Iniciar sesión</a></small>
+        </div>
+        <div class="image-container"></div>
+    </div>
+
+    <script>
+        const form = document.getElementById('registerForm');
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+        const confirmPasswordInput = document.getElementById('confirm-password');
+        const emailError = document.getElementById('emailError');
+        const passwordError = document.getElementById('passwordError');
+
+        form.addEventListener('submit', function(event) {
+            event.preventDefault(); 
+            let isValid = true;
+            emailError.style.display = 'none';
+            passwordError.style.display = 'none';
+
+            // Validación de correo
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(emailInput.value)) {
+                emailError.style.display = 'block';
+                emailInput.classList.add('error');
+                isValid = false;
+            } else {
+                emailInput.classList.remove('error');
+            }
+
+            // Validación de contraseñas
+            if (passwordInput.value !== confirmPasswordInput.value || passwordInput.value.length < 6) {
+                passwordError.style.display = 'block';
+                passwordInput.classList.add('error');
+                confirmPasswordInput.classList.add('error');
+                isValid = false;
+            } else {
+                passwordInput.classList.remove('error');
+                confirmPasswordInput.classList.remove('error');
+            }
+
+            // Si la validación es exitosa, redirigimos a la página de reservaciones
+            if (isValid) {
+                window.location.href = 'reservaciones.html'; 
+            }
+        });
+    </script>
+
+</body>
+</html>

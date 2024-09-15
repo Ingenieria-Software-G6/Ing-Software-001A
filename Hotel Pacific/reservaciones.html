@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Reserva de Hotel - Hotel Pacific</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        /* Estilos básicos */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        nav ul li {
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .banner {
+            background-image: url('https://traders-hotel-kuala-lumpur.hotelmix.es/data/Photos/OriginalPhoto/12129/1212963/1212963859/Traders-Hotel-Kuala-Lumpur-Exterior.JPEG');
+            background-size: cover;
+            color: white;
+            text-align: center;
+            padding: 100px 0;
+        }
+
+        .banner h1 {
+            font-size: 50px;
+            margin: 0;
+        }
+
+        .banner p {
+            font-size: 20px;
+        }
+
+        .form-reserva {
+            margin-top: 30px;
+        }
+
+        .form-reserva input, .form-reserva select {
+            padding: 10px;
+            margin: 5px;
+            width: 200px;
+        }
+
+        .form-reserva button {
+            padding: 10px 20px;
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .form-reserva button:hover {
+            background-color: #219150;
+        }
+
+        .habitaciones {
+            text-align: center;
+            margin: 50px 0;
+        }
+
+        .habitacion {
+            display: inline-block;
+            margin: 15px;
+            border: 1px solid #ddd;
+            padding: 20px;
+            width: 300px;
+        }
+
+        .habitacion img {
+            max-width: 100%;
+        }
+
+        .habitacion button {
+            padding: 10px 20px;
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .habitacion button:hover {
+            background-color: #219150;
+        }
+
+        footer {
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        footer .social-icons i {
+            margin: 0 10px;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Hotel Pacific</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="#">Habitaciones</a></li>
+                <li><a href="#">Servicios</a></li>
+                <li><a href="#">Galería</a></li>
+                <li><a href="#">Contacto</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="banner">
+        <h1>Bienvenido a Hotel Pacific</h1>
+        <p>Reserva tu habitación y disfruta de una estancia inolvidable.</p>
+        <div class="form-reserva">
+            <form>
+                <input type="date" placeholder="Fecha de entrada">
+                <input type="date" placeholder="Fecha de salida">
+                <select>
+                    <option value="1">1 Huésped</option>
+                    <option value="2">2 Huéspedes</option>
+                    <option value="3">3 Huéspedes</option>
+                    <option value="4">4 Huéspedes</option>
+                </select>
+                <button type="submit">Buscar disponibilidad</button>
+            </form>
+        </div>
+    </section>
+
+    <section class="habitaciones">
+        <h2>Nuestras habitaciones</h2>
+        <div class="habitacion">
+            <img src="https://images.mirai.com/INFOROOMS/56073694/o4tKILldUV0L0XCr6Rst/o4tKILldUV0L0XCr6Rst_large.jpg" alt="Habitación Deluxe">
+            <h3>Habitación Deluxe</h3>
+            <p>$150.000 por noche</p>
+            
+            <a href="pago.html">
+                <button>Reservar Ahora</button>
+            </a>
+        </div>
+        <div class="habitacion">
+            <img src="https://epagosreforma.com/wp-content/uploads/2024/03/Junior-suite-2-test-1500x1002-1.jpg" alt="Suite Junior">
+            <h3>Suite Junior</h3>
+            <p>$100.000 por noche</p>
+            <!-- Redirige al portal de pago -->
+            <a href="pago.html">
+                <button>Reservar Ahora</button>
+            </a>
+        </div>
+        <div class="habitacion">
+            <img src="https://lh5.googleusercontent.com/proxy/RBWIXU5y6EkUjj8Zd3PjUT05kA9JJxaS7f_kpOclFN0tNBgPb_SVKA532KCRlrfqeG84QyX8RPsjndHg3l5U6d_ROFMu5fTqNNIj9Z2Md1o16eN5Myv6_fIXU7hXJaOU89wnq_T6A0qbEnwCaN_E" alt="Habitación Estándar">
+            <h3>Habitación Estándar</h3>
+            <p>$65.000 por noche</p>
+            <!-- Redirige al portal de pago -->
+            <a href="pago.html">
+                <button>Reservar Ahora</button>
+            </a>
+        </div>
+    </section>
+
+    <footer>
+        <p>© 2024 Nombre del Hotel - Todos los derechos reservados</p>
+        <div class="social-icons">
+            <i class="fab fa-facebook-f"></i>
+            <i class="fab fa-twitter"></i>
+            <i class="fab fa-instagram"></i>
+        </div>
+    </footer>
+
+</body>
+</html>

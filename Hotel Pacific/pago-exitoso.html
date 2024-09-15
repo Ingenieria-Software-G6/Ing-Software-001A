@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pago Exitoso</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+            background-image: url('https://www.hotels-new-york.org/data/Photos/OriginalPhoto/7446/744658/744658519/new-york-the-westin-at-times-square-hotel-photo-51.JPEG');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            padding: 40px;
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .processing {
+            font-size: 18px;
+            color: #555;
+            margin-bottom: 20px;
+        }
+
+        .spinner {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px auto;
+            border: 10px solid #f3f3f3;
+            border-top: 10px solid #27ae60;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .success-message {
+            display: none;
+            font-size: 18px;
+            color: #27ae60;
+            margin-top: 20px;
+        }
+
+        .success-message strong {
+            font-weight: bold;
+        }
+
+        .email {
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="processing" id="processingText">Procesando tu pago...</div>
+        <div class="spinner" id="spinner"></div>
+        <div class="success-message" id="successMessage">
+            <strong>¡Pago realizado con éxito!</strong><br>
+            Tu comprobante se ha enviado al correo <span class="email" id="userEmail">correo@ejemplo.com</span>
+        </div>
+    </div>
+
+    <script>
+        // Simular el procesamiento de pago 
+        const userEmail = "marcela.flores@gmail.com"; 
+        const processingText = document.getElementById('processingText');
+        const spinner = document.getElementById('spinner');
+        const successMessage = document.getElementById('successMessage');
+        const userEmailSpan = document.getElementById('userEmail');
+
+        // Mostrar la animación de procesamiento 
+        setTimeout(() => {
+            processingText.style.display = 'none'; // Ocultar el texto de "Procesando pago..."
+            spinner.style.display = 'none'; // Ocultar la animación del spinner
+            successMessage.style.display = 'block'; // Mostrar el mensaje de éxito
+            userEmailSpan.textContent = userEmail; // Mostrar el correo en el mensaje de éxito
+        }, 5000); 
+    </script>
+
+</body>
+</html>

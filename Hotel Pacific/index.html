@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotel Pacific - Iniciar Sesión</title>
+    <style>
+        /* Estilos globales */
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-image: url('https://media.admagazine.com/photos/65b927be727a9ac268def3e7/16:9/w_2560%2Cc_limit/atr.royalmansion-bar-mr.jpg'); 
+            background-size: cover;
+            background-position: center;
+        }
+
+        .login-container {
+            background-color: rgba(255, 255, 255, 0.85);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+            max-width: 400px;
+            width: 100%;
+        }
+
+        .login-container h1 {
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        .login-container input[type="text"],
+        .login-container input[type="password"] {
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+            background-color: #f1f1f1;
+            font-size: 16px;
+        }
+
+        .login-container button {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 5px;
+            background-color: #3498db;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .login-container button:hover {
+            background-color: #2980b9;
+        }
+
+        .login-container .register-link {
+            margin-top: 20px;
+            display: block;
+            font-size: 14px;
+            color: #7f8c8d;
+        }
+
+        .login-container .register-link a {
+            color: #3498db;
+            text-decoration: none;
+        }
+
+        .login-container .register-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-container">
+        <h1>Hotel Pacific</h1>
+        <form id="loginForm">
+            <input type="text" id="username" placeholder="Nombre de usuario" required>
+            <input type="password" id="password" placeholder="Contraseña" required>
+            <button type="submit">Iniciar sesión</button>
+        </form>
+        <div class="register-link">
+            ¿Aún no eres miembro? <a href="registrar.html">Regístrate</a> <!-- Enlace 
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById('loginForm');
+
+        form.addEventListener('submit', function(event) {
+            event.preventDefault(); // Evitar el envío del formulario por defecto
+
+            // Simulación de inicio de sesión
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            if (username && password) {
+                // Simulación: Redirigir a la página de reservas tras iniciar sesión
+                window.location.href = 'reservaciones.html'; 
+            } else {
+                alert('Por favor, completa los campos de nombre de usuario y contraseña.');
+            }
+        });
+    </script>
+
+</body>
+</html>
