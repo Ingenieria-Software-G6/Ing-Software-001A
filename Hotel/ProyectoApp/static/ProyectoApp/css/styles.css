@@ -1,3 +1,4 @@
+/* Estilo general del fondo */
 body {
     background-image: url("../img/hotel-bg.jpg");
     background-size: cover;
@@ -5,12 +6,71 @@ body {
     height: 100vh;
 }
 
-.login-container {
+/* Contenedor del formulario de login y registro */
+.container {
     margin-top: 150px;
 }
 
-.login-form {
-    background: rgba(255, 255, 255, 0.8);
+/* Estilos compartidos entre login y registro */
+.login-form, .register-form {
+    background: rgba(255, 255, 255, 0.8); /* Fondo blanco semi-transparente */
     padding: 30px;
     border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1); /* Sombra ligera */
+}
+
+/* Estilo para los títulos en login y registro */
+.login-form h2, .register-form h2 {
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #333;
+}
+
+/* Estilo para los campos del formulario */
+.login-form input[type="text"],
+.login-form input[type="password"],
+.register-form input[type="text"],
+.register-form input[type="email"],
+.register-form input[type="password"],
+.register-form input[type="number"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+/* Botones para el login y registro */
+.login-form button, .register-form button {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff; /* Azul predeterminado */
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+/* Efecto hover en el botón */
+.login-form button:hover, .register-form button:hover {
+    background-color: #0056b3; /* Azul más oscuro en hover */
+}
+
+/* Mensajes de error o éxito */
+.alert {
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+/* Media query para móviles */
+@media (max-width: 768px) {
+    .login-form, .register-form {
+        padding: 20px;
+    }
+
+    .login-form h2, .register-form h2 {
+        font-size: 20px;
+    }
 }
