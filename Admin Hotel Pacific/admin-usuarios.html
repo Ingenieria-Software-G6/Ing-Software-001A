@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Usuarios - Hotel Pacific</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body, html {
+            height: 100%;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+        }
+
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 36px;
+            margin-bottom: 20px;
+            color: #2c3e50;
+            text-align: center;
+        }
+
+        p {
+            font-size: 18px;
+            color: #7f8c8d;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+
+        table th, table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        table th {
+            background-color: #3498db;
+            color: white;
+        }
+
+        table tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        button {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .btn-edit {
+            background-color: #f39c12;
+            color: white;
+        }
+
+        .btn-delete {
+            background-color: #e74c3c;
+            color: white;
+        }
+
+        .btn-edit:hover {
+            background-color: #e67e22;
+        }
+
+        .btn-delete:hover {
+            background-color: #c0392b;
+        }
+
+        .add-user-form {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 50px;
+        }
+
+        .add-user-form h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #3498db;
+            text-align: center;
+        }
+
+        .add-user-form label {
+            display: block;
+            font-size: 16px;
+            color: #555;
+            margin-bottom: 8px;
+        }
+
+        .add-user-form input, .add-user-form select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .add-user-form button {
+            width: 100%;
+            padding: 12px;
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .add-user-form button:hover {
+            background-color: #219150;
+        }
+
+        footer {
+            background-color: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Gestión de Usuarios - Hotel Pacific</h1>
+    </header>
+
+    <div class="container">
+        <p>Aquí puedes gestionar los usuarios del sistema. Edita, elimina o agrega nuevos usuarios según sea necesario.</p>
+
+        <!-- Tabla para listar usuarios -->
+        <table id="userTable">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Email</th>
+                    <th>Rol</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="userList">
+               
+            </tbody>
+        </table>
+
+        <!-- Agregar nuevo usuario -->
+        <div class="add-user-form">
+            <h2 id="formTitle">Agregar nuevo usuario</h2>
+            <form id="userForm">
+                <label for="user-name">Nombre:</label>
+                <input type="text" id="user-name" placeholder="Ej: Juan Pérez" required>
+
+                <label for="user-email">Correo electrónico:</label>
+                <input type="email" id="user-email" placeholder="Ej: juan.perez@gmail.com" required>
+
+                <label for="user-role">Rol:</label>
+                <select id="user-role" required>
+                    <option value="Usuario">Usuario</option>
+                    <option value="Administrador">Administrador</option>
+                </select>
+
+                <input type="hidden" id="user-index">
+
+                <button type="submit">Agregar Usuario</button>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Hotel Pacific - Todos los derechos reservados</p>
+    </footer>
+
+    <script>
+        // Datos de usuarios
+        let users = [
+            { name: 'Juan Pérez', email: 'juan.perez@gmail.com', role: 'Usuario' },
+            { name: 'Ana Gómez', email: 'ana.gomez@gmail.com', role: 'Administrador' },
+            { name: 'Carlos Rodríguez', email: 'carlos.rodriguez@gmail.com', role: 'Usuario' }
+        ];
+
+        const userList = document.getElementById('userList');
+        const userForm = document.getElementById('userForm');
+        const userNameInput = document.getElementById('user-name');
+        const userEmailInput = document.getElementById('user-email');
+        const userRoleInput = document.getElementById('user-role');
+        const userIndexInput = document.getElementById('user-index');
+        const formTitle = document.getElementById('formTitle');
+
+        // Mostrar los usuarios 
+        function displayUsers() {
+            userList.innerHTML = '';
+            users.forEach((user, index) => {
+                const row = document.createElement('tr');
+
+                row.innerHTML = `
+                    <td>${user.name}</td>
+                    <td>${user.email}</td>
+                    <td>${user.role}</td>
+                    <td>
+                        <button class="btn-edit" onclick="editUser(${index})">Editar</button>
+                        <button class="btn-delete" onclick="deleteUser(${index})">Eliminar</button>
+                    </td>
+                `;
+                userList.appendChild(row);
+            });
+        }
+
+        // Agregar o actualizar un usuario
+        userForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const userName = userNameInput.value;
+            const userEmail = userEmailInput.value;
+            const userRole = userRoleInput.value;
+            const userIndex = userIndexInput.value;
+
+            if (userIndex === '') {
+                
+                users.push({ name: userName, email: userEmail, role: userRole });
+            } else {
+                
+                users[userIndex].name = userName;
+                users[userIndex].email = userEmail;
+                users[userIndex].role = userRole;
+            }
+
+            userForm.reset();
+            userIndexInput.value = '';
+            formTitle.textContent = 'Agregar nuevo usuario';
+            displayUsers();
+        });
+
+        // Eliminar un usuario
+        function deleteUser(index) {
+            users.splice(index, 1);
+            displayUsers();
+        }
+
+        // Editar un usuario
+        function editUser(index) {
+            const user = users[index];
+            userNameInput.value = user.name;
+            userEmailInput.value = user.email;
+            userRoleInput.value = user.role;
+            userIndexInput.value = index;
+            formTitle.textContent = 'Editar Usuario';
+        }
+
+        // Mostrar los usuarios al cargar la página
+        displayUsers();
+    </script>
+
+</body>
+</html>

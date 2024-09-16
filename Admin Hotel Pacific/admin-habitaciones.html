@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Habitaciones - Hotel Pacific</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body, html {
+            height: 100%;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+        }
+
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 36px;
+            margin-bottom: 20px;
+            color: #2c3e50;
+            text-align: center;
+        }
+
+        p {
+            font-size: 18px;
+            color: #7f8c8d;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+
+        table th, table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        table th {
+            background-color: #3498db;
+            color: white;
+        }
+
+        table tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        button {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .btn-edit {
+            background-color: #f39c12;
+            color: white;
+        }
+
+        .btn-delete {
+            background-color: #e74c3c;
+            color: white;
+        }
+
+        .btn-edit:hover {
+            background-color: #e67e22;
+        }
+
+        .btn-delete:hover {
+            background-color: #c0392b;
+        }
+
+        .add-room-form {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 50px;
+        }
+
+        .add-room-form h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #3498db;
+            text-align: center;
+        }
+
+        .add-room-form label {
+            display: block;
+            font-size: 16px;
+            color: #555;
+            margin-bottom: 8px;
+        }
+
+        .add-room-form input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .add-room-form button {
+            width: 100%;
+            padding: 12px;
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .add-room-form button:hover {
+            background-color: #219150;
+        }
+
+        footer {
+            background-color: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Gestión de Habitaciones - Hotel Pacific</h1>
+    </header>
+
+    <div class="container">
+        <p>Aquí puedes gestionar las habitaciones del hotel. Edita, elimina o agrega nuevas habitaciones según sea necesario.</p>
+
+        <!-- listar habitaciones -->
+        <table id="roomTable">
+            <thead>
+                <tr>
+                    <th>Habitación</th>
+                    <th>Precio por noche</th>
+                    <th>Disponibilidad</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="roomList">
+       
+            </tbody>
+        </table>
+
+        
+        <div class="add-room-form">
+            <h2 id="formTitle">Agregar nueva habitación</h2>
+            <form id="roomForm">
+                <label for="room-name">Nombre de la habitación:</label>
+                <input type="text" id="room-name" placeholder="Ej: Habitación Deluxe" required>
+
+                <label for="room-price">Precio por noche:</label>
+                <input type="number" id="room-price" placeholder="Ej: 150000" required>
+
+                <input type="hidden" id="room-index">
+
+                <button type="submit">Agregar Habitación</button>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Hotel Pacific - Todos los derechos reservados</p>
+    </footer>
+
+    <script>
+        // Datos de habitaciones 
+        let rooms = [
+            { name: 'Habitación Deluxe', price: 150000, available: true },
+            { name: 'Suite Junior', price: 100000, available: false },
+            { name: 'Habitación Estándar', price: 65000, available: true }
+        ];
+
+        const roomList = document.getElementById('roomList');
+        const roomForm = document.getElementById('roomForm');
+        const roomNameInput = document.getElementById('room-name');
+        const roomPriceInput = document.getElementById('room-price');
+        const roomIndexInput = document.getElementById('room-index');
+        const formTitle = document.getElementById('formTitle');
+
+        // Función para mostrar las habitaciones 
+        function displayRooms() {
+            roomList.innerHTML = '';
+            rooms.forEach((room, index) => {
+                const row = document.createElement('tr');
+
+                row.innerHTML = `
+                    <td>${room.name}</td>
+                    <td>$${room.price.toLocaleString()}</td>
+                    <td>${room.available ? 'Disponible' : 'Ocupada'}</td>
+                    <td>
+                        <button class="btn-edit" onclick="editRoom(${index})">Editar</button>
+                        <button class="btn-delete" onclick="deleteRoom(${index})">Eliminar</button>
+                    </td>
+                `;
+                roomList.appendChild(row);
+            });
+        }
+
+        // agregar o actualizar una habitación
+        roomForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const roomName = roomNameInput.value;
+            const roomPrice = parseInt(roomPriceInput.value);
+            const roomIndex = roomIndexInput.value;
+
+            if (roomIndex === '') {
+                
+                rooms.push({ name: roomName, price: roomPrice, available: true });
+            } else {
+                
+                rooms[roomIndex].name = roomName;
+                rooms[roomIndex].price = roomPrice;
+            }
+
+            roomForm.reset();
+            roomIndexInput.value = '';
+            formTitle.textContent = 'Agregar nueva habitación';
+            displayRooms();
+        });
+
+        // eliminar una habitación
+        function deleteRoom(index) {
+            rooms.splice(index, 1);
+            displayRooms();
+        }
+
+        // editar una habitación
+        function editRoom(index) {
+            const room = rooms[index];
+            roomNameInput.value = room.name;
+            roomPriceInput.value = room.price;
+            roomIndexInput.value = index;
+            formTitle.textContent = 'Editar Habitación';
+        }
+
+        // mostrar las habitaciones al cargar la página
+        displayRooms();
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Reservas - Hotel Pacific</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body, html {
+            height: 100%;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+        }
+
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 36px;
+            margin-bottom: 20px;
+            color: #2c3e50;
+            text-align: center;
+        }
+
+        p {
+            font-size: 18px;
+            color: #7f8c8d;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+
+        table th, table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        table th {
+            background-color: #3498db;
+            color: white;
+        }
+
+        table tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        button {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .btn-edit {
+            background-color: #f39c12;
+            color: white;
+        }
+
+        .btn-delete {
+            background-color: #e74c3c;
+            color: white;
+        }
+
+        .btn-edit:hover {
+            background-color: #e67e22;
+        }
+
+        .btn-delete:hover {
+            background-color: #c0392b;
+        }
+
+        .add-reservation-form {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 50px;
+        }
+
+        .add-reservation-form h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #3498db;
+            text-align: center;
+        }
+
+        .add-reservation-form label {
+            display: block;
+            font-size: 16px;
+            color: #555;
+            margin-bottom: 8px;
+        }
+
+        .add-reservation-form input, .add-reservation-form select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .add-reservation-form button {
+            width: 100%;
+            padding: 12px;
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .add-reservation-form button:hover {
+            background-color: #219150;
+        }
+
+        footer {
+            background-color: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Gestión de Reservas - Hotel Pacific</h1>
+    </header>
+
+    <div class="container">
+        <p>Aquí puedes gestionar las reservas del hotel. Edita, elimina o agrega nuevas reservas según sea necesario.</p>
+
+        <!-- listar reservas -->
+        <table id="reservationTable">
+            <thead>
+                <tr>
+                    <th>Huésped</th>
+                    <th>Habitación</th>
+                    <th>Fecha de entrada</th>
+                    <th>Fecha de salida</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="reservationList">
+             
+            </tbody>
+        </table>
+
+        <!-- nueva reserva -->
+        <div class="add-reservation-form">
+            <h2 id="formTitle">Agregar nueva reserva</h2>
+            <form id="reservationForm">
+                <label for="guest-name">Nombre del huésped:</label>
+                <input type="text" id="guest-name" placeholder="Ej: Juan Pérez" required>
+
+                <label for="room-type">Tipo de habitación:</label>
+                <select id="room-type" required>
+                    <option value="Habitación Deluxe">Habitación Deluxe</option>
+                    <option value="Suite Junior">Suite Junior</option>
+                    <option value="Habitación Estándar">Habitación Estándar</option>
+                </select>
+
+                <label for="checkin-date">Fecha de entrada:</label>
+                <input type="date" id="checkin-date" required>
+
+                <label for="checkout-date">Fecha de salida:</label>
+                <input type="date" id="checkout-date" required>
+
+                <input type="hidden" id="reservation-index">
+
+                <button type="submit">Agregar Reserva</button>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Hotel Pacific - Todos los derechos reservados</p>
+    </footer>
+
+    <script>
+      
+        let reservations = [
+            { guest: 'Juan Pérez', room: 'Habitación Deluxe', checkin: '2024-09-15', checkout: '2024-09-20' },
+            { guest: 'Ana Gómez', room: 'Suite Junior', checkin: '2024-09-10', checkout: '2024-09-12' },
+            { guest: 'Carlos Rodríguez', room: 'Habitación Estándar', checkin: '2024-09-18', checkout: '2024-09-22' }
+        ];
+
+        const reservationList = document.getElementById('reservationList');
+        const reservationForm = document.getElementById('reservationForm');
+        const guestNameInput = document.getElementById('guest-name');
+        const roomTypeInput = document.getElementById('room-type');
+        const checkinDateInput = document.getElementById('checkin-date');
+        const checkoutDateInput = document.getElementById('checkout-date');
+        const reservationIndexInput = document.getElementById('reservation-index');
+        const formTitle = document.getElementById('formTitle');
+
+        // Mostrar las reservas 
+        function displayReservations() {
+            reservationList.innerHTML = '';
+            reservations.forEach((reservation, index) => {
+                const row = document.createElement('tr');
+
+                row.innerHTML = `
+                    <td>${reservation.guest}</td>
+                    <td>${reservation.room}</td>
+                    <td>${reservation.checkin}</td>
+                    <td>${reservation.checkout}</td>
+                    <td>
+                        <button class="btn-edit" onclick="editReservation(${index})">Editar</button>
+                        <button class="btn-delete" onclick="deleteReservation(${index})">Eliminar</button>
+                    </td>
+                `;
+                reservationList.appendChild(row);
+            });
+        }
+
+        // Agregar o actualizar una reserva
+        reservationForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const guestName = guestNameInput.value;
+            const roomType = roomTypeInput.value;
+            const checkinDate = checkinDateInput.value;
+            const checkoutDate = checkoutDateInput.value;
+            const reservationIndex = reservationIndexInput.value;
+
+            if (reservationIndex === '') {
+                
+                reservations.push({ guest: guestName, room: roomType, checkin: checkinDate, checkout: checkoutDate });
+            } else {
+                
+                reservations[reservationIndex].guest = guestName;
+                reservations[reservationIndex].room = roomType;
+                reservations[reservationIndex].checkin = checkinDate;
+                reservations[reservationIndex].checkout = checkoutDate;
+            }
+
+            reservationForm.reset();
+            reservationIndexInput.value = '';
+            formTitle.textContent = 'Agregar nueva reserva';
+            displayReservations();
+        });
+
+        // Eliminar una reserva
+        function deleteReservation(index) {
+            reservations.splice(index, 1);
+            displayReservations();
+        }
+
+        // Editar una reserva
+        function editReservation(index) {
+            const reservation = reservations[index];
+            guestNameInput.value = reservation.guest;
+            roomTypeInput.value = reservation.room;
+            checkinDateInput.value = reservation.checkin;
+            checkoutDateInput.value = reservation.checkout;
+            reservationIndexInput.value = index;
+            formTitle.textContent = 'Editar Reserva';
+        }
+
+        // Mostrar las reservas al cargar la página
+        displayReservations();
+    </script>
+
+</body>
+</html>
