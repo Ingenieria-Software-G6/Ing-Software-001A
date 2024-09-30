@@ -82,12 +82,21 @@
             color: white;
         }
 
+        .btn-availability {
+            background-color: #3498db;
+            color: white;
+        }
+
         .btn-edit:hover {
             background-color: #e67e22;
         }
 
         .btn-delete:hover {
             background-color: #c0392b;
+        }
+
+        .btn-availability:hover {
+            background-color: #2980b9;
         }
 
         .add-room-form {
@@ -167,11 +176,10 @@
                 </tr>
             </thead>
             <tbody id="roomList">
-       
             </tbody>
         </table>
 
-        
+        <!-- Formulario para agregar o actualizar habitación -->
         <div class="add-room-form">
             <h2 id="formTitle">Agregar nueva habitación</h2>
             <form id="roomForm">
@@ -180,6 +188,13 @@
 
                 <label for="room-price">Precio por noche:</label>
                 <input type="number" id="room-price" placeholder="Ej: 150000" required>
+
+                <!-- Nuevos campos para las fechas de disponibilidad -->
+                <label for="room-start-date">Fecha de inicio de disponibilidad:</label>
+                <input type="date" id="room-start-date" required>
+
+                <label for="room-end-date">Fecha de fin de disponibilidad:</label>
+                <input type="date" id="room-end-date" required>
 
                 <input type="hidden" id="room-index">
 
@@ -193,17 +208,18 @@
     </footer>
 
     <script>
-        // Datos de habitaciones 
         let rooms = [
-            { name: 'Habitación Deluxe', price: 150000, available: true },
-            { name: 'Suite Junior', price: 100000, available: false },
-            { name: 'Habitación Estándar', price: 65000, available: true }
+            { name: 'Habitación Deluxe', price: 150000, available: true, startDate: '2024-01-01', endDate: '2024-01-31' },
+            { name: 'Suite Junior', price: 100000, available: false, startDate: '2024-02-01', endDate: '2024-02-28' },
+            { name: 'Habitación Estándar', price: 65000, available: true, startDate: '2024-03-01', endDate: '2024-03-31' }
         ];
 
         const roomList = document.getElementById('roomList');
         const roomForm = document.getElementById('roomForm');
         const roomNameInput = document.getElementById('room-name');
         const roomPriceInput = document.getElementById('room-price');
+        const roomStartDateInput = document.getElementById('room-start-date'); 
+        const roomEndDateInput = document.getElementById('room-end-date'); 
         const roomIndexInput = document.getElementById('room-index');
         const formTitle = document.getElementById('formTitle');
 
@@ -212,7 +228,6 @@
             roomList.innerHTML = '';
             rooms.forEach((room, index) => {
                 const row = document.createElement('tr');
-
                 row.innerHTML = `
                     <td>${room.name}</td>
                     <td>$${room.price.toLocaleString()}</td>
@@ -220,26 +235,29 @@
                     <td>
                         <button class="btn-edit" onclick="editRoom(${index})">Editar</button>
                         <button class="btn-delete" onclick="deleteRoom(${index})">Eliminar</button>
+                        <button class="btn-availability" onclick="toggleAvailability(${index})">${room.available ? 'Marcar como Ocupada' : 'Marcar como Disponible'}</button>
                     </td>
                 `;
                 roomList.appendChild(row);
             });
         }
 
-        // agregar o actualizar una habitación
+        // Agregar o actualizar una habitación
         roomForm.addEventListener('submit', function(event) {
             event.preventDefault();
             const roomName = roomNameInput.value;
             const roomPrice = parseInt(roomPriceInput.value);
+            const roomStartDate = roomStartDateInput.value; 
+            const roomEndDate = roomEndDateInput.value; 
             const roomIndex = roomIndexInput.value;
 
             if (roomIndex === '') {
-                
-                rooms.push({ name: roomName, price: roomPrice, available: true });
+                rooms.push({ name: roomName, price: roomPrice, available: true, startDate: roomStartDate, endDate: roomEndDate });
             } else {
-                
                 rooms[roomIndex].name = roomName;
                 rooms[roomIndex].price = roomPrice;
+                rooms[roomIndex].startDate = roomStartDate;
+                rooms[roomIndex].endDate = roomEndDate;
             }
 
             roomForm.reset();
@@ -248,22 +266,30 @@
             displayRooms();
         });
 
-        // eliminar una habitación
+        // Eliminar una habitación
         function deleteRoom(index) {
             rooms.splice(index, 1);
             displayRooms();
         }
 
-        // editar una habitación
+        // Editar una habitación
         function editRoom(index) {
             const room = rooms[index];
             roomNameInput.value = room.name;
             roomPriceInput.value = room.price;
+            roomStartDateInput.value = room.startDate; 
+            roomEndDateInput.value = room.endDate; 
             roomIndexInput.value = index;
             formTitle.textContent = 'Editar Habitación';
         }
 
-        // mostrar las habitaciones al cargar la página
+        // Cambiar la disponibilidad de una habitación
+        function toggleAvailability(index) {
+            rooms[index].available = !rooms[index].available;
+            displayRooms();
+        }
+
+        // Mostrar las habitaciones al cargar la página
         displayRooms();
     </script>
 

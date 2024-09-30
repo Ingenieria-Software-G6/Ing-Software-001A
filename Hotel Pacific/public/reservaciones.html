@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reserva de Hotel - Hotel Pacific</title>
+    <style>
+   
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .banner {
+            background-image: url('https://traders-hotel-kuala-lumpur.hotelmix.es/data/Photos/OriginalPhoto/12129/1212963/1212963859/Traders-Hotel-Kuala-Lumpur-Exterior.JPEG');
+            background-size: cover;
+            color: white;
+            text-align: center;
+            padding: 100px 0;
+        }
+
+        .banner h1 {
+            font-size: 50px;
+            margin: 0;
+        }
+
+        .banner p {
+            font-size: 20px;
+        }
+
+        .form-reserva {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .form-reserva input,
+        .form-reserva select {
+            padding: 10px;
+            margin: 5px;
+            width: 200px;
+        }
+
+        footer {
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .rooms {
+            display: flex;
+            justify-content: space-around;
+            margin: 40px 0;
+        }
+
+        .room {
+            text-align: center;
+            width: 30%;
+        }
+
+        .room img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+
+        .room h2 {
+            font-size: 24px;
+            margin: 10px 0;
+        }
+
+        .room p {
+            font-size: 16px;
+            color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Hotel Pacific</h1>
+</header>
+
+<section class="banner">
+    <h1>Reserva tu habitación</h1>
+    <p>Selecciona la fecha y la habitación que deseas reservar.</p>
+</section>
+
+<!-- Descripción e imágenes de las habitaciones -->
+<section class="rooms">
+    <div class="room">
+        <img src="https://backoffice.vilavitaparc.com/sites/default/files/styles/heroimg/public/imgs/deluxe-room-ocean-view-01-optim%5B1%5D.jpg?itok=sjw6UH7W" alt="Habitación Deluxe">
+        <h2>Habitación Deluxe</h2>
+        <p>Una lujosa habitación con vista al mar, cama king size, y jacuzzi privado.</p>
+    </div>
+    <div class="room">
+        <img src="https://image-tc.galaxy.tf/wijpeg-5r1phjea9q43lg5ts1sz0kwn3/habitacion-suite-1-copia_wide.jpg?crop=0%2C100%2C1920%2C1080" alt="Suite Junior">
+        <h2>Suite Junior</h2>
+        <p>Amplia suite con sala de estar, cama queen size y balcón privado.</p>
+    </div>
+    <div class="room">
+        <img src="https://r.profitroom.pl/hotelsuitecomfort/images/gallery/thumbs/1920x1080/202205101833210.HSC_HabitacionDoble1.jpg?updated=2024-09-20_05-45?updated=2024-09-20_05-45" alt="Habitación Estándar">
+        <h2>Habitación Estándar</h2>
+        <p>Comodidad y funcionalidad con una cama doble, perfecta para estancias cortas.</p>
+    </div>
+</section>
+
+<!-- Formulario de reserva -->
+<div class="form-reserva">
+    <form id="reservationForm">
+        <input type="text" id="guest" placeholder="Nombre del Huésped" required>
+        <input type="date" id="checkin" required>
+        <input type="date" id="checkout" required>
+
+        <select id="room">
+            <option value="Deluxe">Habitación Deluxe</option>
+            <option value="Suite Junior">Suite Junior</option>
+            <option value="Estándar">Habitación Estándar</option>
+        </select>
+        <button type="submit">Reservar</button>
+    </form>
+</div>
+
+<footer>
+    <p>© 2024 Hotel Pacific - Todos los derechos reservados</p>
+</footer>
+
+<script>
+    document.getElementById('reservationForm').addEventListener('submit', function (event) {
+        event.preventDefault();
+        
+        const guest = document.getElementById('guest').value;
+        const checkin = document.getElementById('checkin').value;
+        const checkout = document.getElementById('checkout').value;
+        const room = document.getElementById('room').value;
+
+        const reservationData = {
+            guest: guest,
+            room: room,
+            checkin: checkin,
+            checkout: checkout
+        };
+
+        fetch('/api/reservations', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(reservationData),
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Reserva realizada con éxito');
+            } else {
+                alert('Error al realizar la reserva: ' + data.message);
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    });
+</script>
+
+</body>
+</html>

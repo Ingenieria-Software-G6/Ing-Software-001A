@@ -194,9 +194,33 @@
                 confirmPasswordInput.classList.remove('error');
             }
 
-            // Si la validación es exitosa, redirigimos a la página de reservaciones
+           
             if (isValid) {
-                window.location.href = 'reservaciones.html'; 
+                const name = document.getElementById('name').value;
+                const email = emailInput.value;
+                const password = passwordInput.value;
+
+                
+                fetch('/api/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ name, email, password })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                     
+                        alert('Registro exitoso. Redirigiendo a la página de reservas.');
+                        window.location.href = 'reservaciones.html';
+                    } else {
+                        alert(data.message || 'Hubo un error en el registro.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error en la solicitud:', error);
+                });
             }
         });
     </script>

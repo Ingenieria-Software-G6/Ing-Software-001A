@@ -101,34 +101,45 @@
     </div>
 
     <script>
-        // Credenciales de administrador 
-        const adminCredentials = {
-            username: 'admin',
-            password: 'admin123'
-        };
-
         const form = document.getElementById('loginForm');
         const errorMessage = document.getElementById('errorMessage');
 
         form.addEventListener('submit', function(event) {
-            event.preventDefault(); 
+            event.preventDefault();
 
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
 
-            
-            if (username === adminCredentials.username && password === adminCredentials.password) {
-                window.location.href = 'admin-dashboard.html'; 
-            } else {
-                errorMessage.style.display = 'block'; 
-            }
+            // Enviar solicitud al servidor
+            fetch('/api/admin/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username, password })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error en la solicitud');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                 
+                    window.location.href = '/admin';
+                } else {
+                 
+                    errorMessage.style.display = 'block';
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                errorMessage.style.display = 'block';
+                errorMessage.textContent = 'Error al iniciar sesión. Intenta de nuevo.';
+            });
         });
     </script>
 
-
 </body>
 </html>
-
-<!-- username: 'admin', password: 'admin123'-->
-
-

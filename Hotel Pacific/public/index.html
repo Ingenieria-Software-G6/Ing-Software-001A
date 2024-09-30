@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hotel Pacific - Iniciar Sesión</title>
     <style>
-        /* Estilos globales */
+       
         body, html {
             margin: 0;
             padding: 0;
@@ -34,7 +34,7 @@
             margin-bottom: 20px;
         }
 
-        .login-container input[type="text"],
+        .login-container input[type="email"],
         .login-container input[type="password"] {
             width: 100%;
             padding: 15px;
@@ -76,6 +76,22 @@
         .login-container .register-link a:hover {
             text-decoration: underline;
         }
+
+        .login-container .admin-link {
+            margin-top: 15px;
+            font-size: 14px;
+            color: #7f8c8d;
+        }
+
+        .login-container .admin-link a {
+            color: #e74c3c;
+            text-decoration: none;
+        }
+
+        .login-container .admin-link a:hover {
+            text-decoration: underline;
+        }
+
     </style>
 </head>
 <body>
@@ -83,12 +99,17 @@
     <div class="login-container">
         <h1>Hotel Pacific</h1>
         <form id="loginForm">
-            <input type="text" id="username" placeholder="Nombre de usuario" required>
+            <input type="email" id="email" placeholder="Correo electrónico" required>
             <input type="password" id="password" placeholder="Contraseña" required>
             <button type="submit">Iniciar sesión</button>
         </form>
         <div class="register-link">
-            ¿Aún no eres miembro? <a href="registrar.html">Regístrate</a> <!-- Enlace 
+            ¿Aún no eres miembro? <a href="registrar.html">Regístrate</a>
+        </div>
+
+        <!-- Opción para administradores -->
+        <div class="admin-link">
+            ¿Eres administrador? <a href="admin-login.html">Accede aquí</a>
         </div>
     </div>
 
@@ -96,18 +117,34 @@
         const form = document.getElementById('loginForm');
 
         form.addEventListener('submit', function(event) {
-            event.preventDefault(); // Evitar el envío del formulario por defecto
+            event.preventDefault(); 
 
-            // Simulación de inicio de sesión
-            const username = document.getElementById('username').value;
+            const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
 
-            if (username && password) {
-                // Simulación: Redirigir a la página de reservas tras iniciar sesión
-                window.location.href = 'reservaciones.html'; 
-            } else {
-                alert('Por favor, completa los campos de nombre de usuario y contraseña.');
-            }
+            fetch('/api/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ email, password }) 
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Redirigir al usuario según su rol
+                    if (data.role === 'admin') {
+                        window.location.href = 'admin-dashboard.html';
+                    } else {
+                        window.location.href = 'reservaciones.html';
+                    }
+                } else {
+                    alert('Correo o contraseña incorrectos. Inténtalo de nuevo.');
+                }
+            })
+            .catch(error => {
+                console.error('Error en la solicitud:', error);
+            });
         });
     </script>
 

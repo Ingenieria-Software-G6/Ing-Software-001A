@@ -192,7 +192,7 @@
                 <label for="checkout-date">Fecha de salida:</label>
                 <input type="date" id="checkout-date" required>
 
-                <input type="hidden" id="reservation-index">
+                <input type="hidden" id="reservation-id">
 
                 <button type="submit">Agregar Reserva</button>
             </form>
@@ -204,36 +204,36 @@
     </footer>
 
     <script>
-      
-        let reservations = [
-            { guest: 'Juan Pérez', room: 'Habitación Deluxe', checkin: '2024-09-15', checkout: '2024-09-20' },
-            { guest: 'Ana Gómez', room: 'Suite Junior', checkin: '2024-09-10', checkout: '2024-09-12' },
-            { guest: 'Carlos Rodríguez', room: 'Habitación Estándar', checkin: '2024-09-18', checkout: '2024-09-22' }
-        ];
-
         const reservationList = document.getElementById('reservationList');
         const reservationForm = document.getElementById('reservationForm');
         const guestNameInput = document.getElementById('guest-name');
         const roomTypeInput = document.getElementById('room-type');
         const checkinDateInput = document.getElementById('checkin-date');
         const checkoutDateInput = document.getElementById('checkout-date');
-        const reservationIndexInput = document.getElementById('reservation-index');
+        const reservationIdInput = document.getElementById('reservation-id');
         const formTitle = document.getElementById('formTitle');
 
-        // Mostrar las reservas 
-        function displayReservations() {
-            reservationList.innerHTML = '';
-            reservations.forEach((reservation, index) => {
-                const row = document.createElement('tr');
+        // Obtener las reservas desde la base de datos
+        function fetchReservations() {
+            fetch('/api/admin/reservations')
+                .then(response => response.json())
+                .then(data => displayReservations(data))  
+                .catch(error => console.error('Error fetching reservations:', error));
+        }
 
+        // Mostrar las reservas obtenidas de la base de datos
+        function displayReservations(reservations) {
+            reservationList.innerHTML = '';
+            reservations.forEach(reservation => {
+                const row = document.createElement('tr');
                 row.innerHTML = `
                     <td>${reservation.guest}</td>
                     <td>${reservation.room}</td>
                     <td>${reservation.checkin}</td>
                     <td>${reservation.checkout}</td>
                     <td>
-                        <button class="btn-edit" onclick="editReservation(${index})">Editar</button>
-                        <button class="btn-delete" onclick="deleteReservation(${index})">Eliminar</button>
+                        <button class="btn-edit" onclick="editReservation(${reservation.id})">Editar</button>
+                        <button class="btn-delete" onclick="deleteReservation(${reservation.id})">Eliminar</button>
                     </td>
                 `;
                 reservationList.appendChild(row);
@@ -247,44 +247,72 @@
             const roomType = roomTypeInput.value;
             const checkinDate = checkinDateInput.value;
             const checkoutDate = checkoutDateInput.value;
-            const reservationIndex = reservationIndexInput.value;
+            const reservationId = reservationIdInput.value;
 
-            if (reservationIndex === '') {
-                
-                reservations.push({ guest: guestName, room: roomType, checkin: checkinDate, checkout: checkoutDate });
+            const reservationData = {
+                guest: guestName,
+                room: roomType,
+                checkin: checkinDate,
+                checkout: checkoutDate
+            };
+
+            if (reservationId === '') {
+                // Nueva reserva
+                fetch('/api/admin/reservations', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(reservationData)
+                })
+                .then(() => {
+                    reservationForm.reset();
+                    reservationIdInput.value = '';
+                    formTitle.textContent = 'Agregar nueva reserva';
+                    fetchReservations();
+                });
             } else {
-                
-                reservations[reservationIndex].guest = guestName;
-                reservations[reservationIndex].room = roomType;
-                reservations[reservationIndex].checkin = checkinDate;
-                reservations[reservationIndex].checkout = checkoutDate;
+                // Editar reserva
+                fetch(`/api/admin/reservations/${reservationId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(reservationData)
+                })
+                .then(() => {
+                    reservationForm.reset();
+                    reservationIdInput.value = '';
+                    formTitle.textContent = 'Agregar nueva reserva';
+                    fetchReservations();
+                });
             }
-
-            reservationForm.reset();
-            reservationIndexInput.value = '';
-            formTitle.textContent = 'Agregar nueva reserva';
-            displayReservations();
         });
 
         // Eliminar una reserva
-        function deleteReservation(index) {
-            reservations.splice(index, 1);
-            displayReservations();
+        function deleteReservation(id) {
+            fetch(`/api/admin/reservations/${id}`, {
+                method: 'DELETE'
+            })
+            .then(() => fetchReservations());
         }
 
         // Editar una reserva
-        function editReservation(index) {
-            const reservation = reservations[index];
-            guestNameInput.value = reservation.guest;
-            roomTypeInput.value = reservation.room;
-            checkinDateInput.value = reservation.checkin;
-            checkoutDateInput.value = reservation.checkout;
-            reservationIndexInput.value = index;
-            formTitle.textContent = 'Editar Reserva';
+        function editReservation(id) {
+            fetch(`/api/admin/reservations/${id}`)
+                .then(response => response.json())
+                .then(reservation => {
+                    guestNameInput.value = reservation.guest;
+                    roomTypeInput.value = reservation.room;
+                    checkinDateInput.value = reservation.checkin;
+                    checkoutDateInput.value = reservation.checkout;
+                    reservationIdInput.value = reservation.id;
+                    formTitle.textContent = 'Editar Reserva';
+                });
         }
 
         // Mostrar las reservas al cargar la página
-        displayReservations();
+        fetchReservations();
     </script>
 
 </body>

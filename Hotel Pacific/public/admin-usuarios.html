@@ -181,13 +181,16 @@
                 <label for="user-email">Correo electrónico:</label>
                 <input type="email" id="user-email" placeholder="Ej: juan.perez@gmail.com" required>
 
+                <label for="user-password">Contraseña:</label>
+                <input type="password" id="user-password" placeholder="Contraseña" required>
+
                 <label for="user-role">Rol:</label>
                 <select id="user-role" required>
-                    <option value="Usuario">Usuario</option>
-                    <option value="Administrador">Administrador</option>
+                    <option value="usuario">Usuario</option>
+                    <option value="administrador">Administrador</option>
                 </select>
 
-                <input type="hidden" id="user-index">
+                <input type="hidden" id="user-id">
 
                 <button type="submit">Agregar Usuario</button>
             </form>
@@ -199,82 +202,96 @@
     </footer>
 
     <script>
-        // Datos de usuarios
-        let users = [
-            { name: 'Juan Pérez', email: 'juan.perez@gmail.com', role: 'Usuario' },
-            { name: 'Ana Gómez', email: 'ana.gomez@gmail.com', role: 'Administrador' },
-            { name: 'Carlos Rodríguez', email: 'carlos.rodriguez@gmail.com', role: 'Usuario' }
-        ];
+        // Función para obtener y mostrar los usuarios desde la base de datos
+        function fetchUsers() {
+            fetch('/api/admin/users')
+                .then(response => response.json())
+                .then(data => displayUsers(data.data)) 
+                .catch(error => console.error('Error fetching users:', error));
+        }
 
-        const userList = document.getElementById('userList');
-        const userForm = document.getElementById('userForm');
-        const userNameInput = document.getElementById('user-name');
-        const userEmailInput = document.getElementById('user-email');
-        const userRoleInput = document.getElementById('user-role');
-        const userIndexInput = document.getElementById('user-index');
-        const formTitle = document.getElementById('formTitle');
-
-        // Mostrar los usuarios 
-        function displayUsers() {
+        // Mostrar los usuarios en la tabla
+        function displayUsers(users) {
+            const userList = document.getElementById('userList');
             userList.innerHTML = '';
-            users.forEach((user, index) => {
+            users.forEach(user => {
                 const row = document.createElement('tr');
-
                 row.innerHTML = `
                     <td>${user.name}</td>
                     <td>${user.email}</td>
                     <td>${user.role}</td>
                     <td>
-                        <button class="btn-edit" onclick="editUser(${index})">Editar</button>
-                        <button class="btn-delete" onclick="deleteUser(${index})">Eliminar</button>
+                        <button class="btn-edit" onclick="editUser(${user.id})">Editar</button>
+                        <button class="btn-delete" onclick="deleteUser(${user.id})">Eliminar</button>
                     </td>
                 `;
                 userList.appendChild(row);
             });
         }
 
-        // Agregar o actualizar un usuario
+        // Función para agregar o actualizar un usuario
+        const userForm = document.getElementById('userForm');
         userForm.addEventListener('submit', function(event) {
             event.preventDefault();
-            const userName = userNameInput.value;
-            const userEmail = userEmailInput.value;
-            const userRole = userRoleInput.value;
-            const userIndex = userIndexInput.value;
+            const name = document.getElementById('user-name').value;
+            const email = document.getElementById('user-email').value;
+            const password = document.getElementById('user-password').value;
+            const role = document.getElementById('user-role').value;
+            const id = document.getElementById('user-id').value;
 
-            if (userIndex === '') {
-                
-                users.push({ name: userName, email: userEmail, role: userRole });
+            const userData = { name, email, password, role };
+
+            if (id) {
+                // Editar usuario existente
+                fetch(`/api/admin/users/${id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(userData)
+                })
+                .then(() => {
+                    userForm.reset();
+                    document.getElementById('user-id').value = '';
+                    document.getElementById('formTitle').textContent = 'Agregar nuevo usuario';
+                    fetchUsers();
+                });
             } else {
-                
-                users[userIndex].name = userName;
-                users[userIndex].email = userEmail;
-                users[userIndex].role = userRole;
+                // Agregar nuevo usuario
+                fetch('/api/admin/users', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(userData)
+                })
+                .then(() => {
+                    userForm.reset();
+                    fetchUsers();
+                });
             }
-
-            userForm.reset();
-            userIndexInput.value = '';
-            formTitle.textContent = 'Agregar nuevo usuario';
-            displayUsers();
         });
 
-        // Eliminar un usuario
-        function deleteUser(index) {
-            users.splice(index, 1);
-            displayUsers();
+        // Función para editar un usuario
+        function editUser(id) {
+            fetch(`/api/admin/users/${id}`)
+                .then(response => response.json())
+                .then(user => {
+                    document.getElementById('user-name').value = user.name;
+                    document.getElementById('user-email').value = user.email;
+                    document.getElementById('user-password').value = '';  
+                    document.getElementById('user-role').value = user.role;
+                    document.getElementById('user-id').value = user.id;
+                    document.getElementById('formTitle').textContent = 'Editar Usuario';
+                });
         }
 
-        // Editar un usuario
-        function editUser(index) {
-            const user = users[index];
-            userNameInput.value = user.name;
-            userEmailInput.value = user.email;
-            userRoleInput.value = user.role;
-            userIndexInput.value = index;
-            formTitle.textContent = 'Editar Usuario';
+        // Función para eliminar un usuario
+        function deleteUser(id) {
+            fetch(`/api/admin/users/${id}`, {
+                method: 'DELETE'
+            })
+            .then(() => fetchUsers());
         }
 
-        // Mostrar los usuarios al cargar la página
-        displayUsers();
+        // Cargar usuarios al cargar la página
+        fetchUsers();
     </script>
 
 </body>
